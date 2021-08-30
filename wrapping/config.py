@@ -1,8 +1,8 @@
 working_directory = 'data_paper'
-date = '20210511' #'20210528'
-task = 'table_4' #'fiber__resnet152'
-folderPath_ccv = '/axon/scratch/kmvoit/storage/analysis/pose/data/ccv/'+date+'_'+task
-filePath_labels = '/axon/u/amonsees/DeepLabCut/wrapping/manual_labels/'+date+'/'+task+'/labels.npz'
+date = '20210511'
+task = 'table_4'
+folderPath_ccv = '/ccv_files/'+date+'_'+task # folder in which the ccv-files need to be placed
+filePath_labels = '/manual_labels/'+date+'/'+task+'/labels.npz'
 
 mask_para = list() # will be overwritten 
 mask_para_offset = 0 # will be overwritten 
@@ -63,16 +63,6 @@ if (date == '20210511'):
                        [834, 884, 1259, 455, 'down']],
                      ]) # needs to be set manually (x1, y1, x2, y2, 'up'/'down')
     mask_para_offset = 0
-elif (date == '20210528'):
-    folderPath_ccv = '/axon/scratch/kmvoit/storage/analysis/pose/data/ccv/storage/bulk/2gram_fiberscope_B.EG.1.09/20210528/camerasystem'
-    filePath_labels = '/axon/u/amonsees/DeepLabCut/wrapping/manual_labels/20210528/fiber/labels.npz'
-    frame_rate = 200
-    dFrame = 200
-    index_frames = list([[40800, 56400]])
-    index_frames_save = list([[40800, 56400]])
-    mask_para = list([]) # needs to be set manually (x1, y1, x2, y2, 'up'/'down')
-    mask_para_offset = 0
-
 
 net_type = 'resnet_152' # Type of networks. Currently resnet_50, resnet_101, resnet_152, mobilenet_v2_1.0, mobilenet_v2_0.75, mobilenet_v2_0.5, and mobilenet_v2_0.35 are supported.
 xRes = 1280 # no need to change
