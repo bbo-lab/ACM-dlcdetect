@@ -137,7 +137,7 @@ if __name__ == '__main__':
                     fig.canvas.draw()
                     plt.pause(2**-52)
         # save labels
-        file_save = '/axon/u/amonsees/DeepLabCut/wrapping/dlc_labels/'+\
+        file_save = '/dlc_labels/'+\
                     cfg.date+'/'+cfg.task+'/labels_dlc_{:06d}_{:06d}.npy'.format(index_frames[index][0], index_frames[index][1])
         dlc_labels = dict()
         dlc_labels['file_save'] = file_save
