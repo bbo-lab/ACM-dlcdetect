@@ -1,4 +1,4 @@
-working_directory = 'data_paper'
+working_directory = 'data'
 date = '20210511'
 task = 'table_4'
 folderPath_ccv = '/ccv_files/'+date+'_'+task # folder in which the ccv-files need to be placed
