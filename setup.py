@@ -1,49 +1,31 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-DeepLabCut2.0 Toolbox (deeplabcut.org)
-© A. & M. Mathis Labs
-https://github.com/AlexEMG/DeepLabCut
+import pathlib
+from setuptools import find_packages, setup
+# The directory containing this file
+HERE = pathlib.Path(__file__).parent
 
-Please see AUTHORS for contributors.
-https://github.com/AlexEMG/DeepLabCut/blob/master/AUTHORS
-Licensed under GNU Lesser General Public License v3.0
-"""
+# The text of the README file
+README = (HERE / "README.md").read_text()
 
-import setuptools
-
-with open("README.md", "r") as fh:
-    long_description = fh.read()
-
-setuptools.setup(
-    name="deeplabcut",
-    version="2.1.6.4",
-    author="A. & M. Mathis Labs",
-    author_email="alexander.mathis@bethgelab.org",
-    description="Markerless pose-estimation of user-defined features with deep learning",
-    long_description=long_description,
+# This call to setup() does all the work
+setup(
+    name="bbo-acm-dlcdetect",
+    version="0.2.0",
+    description="Wrapper for DeepLabCut to take inputs from our manual-marking GUI and outputs compatible with ACM",
+    long_description=README,
     long_description_content_type="text/markdown",
-    url="https://github.com/AlexEMG/DeepLabCut",
-    install_requires=['certifi','chardet','click','easydict',
-                      'h5py~=2.7','intel-openmp','imgaug',
-                      'ipython','ipython-genutils',
-                      'matplotlib==3.0.3','moviepy','numpy==1.16.4','opencv-python~=3.4',
-                      'pandas','patsy','python-dateutil','pyyaml>=5.1','requests',
-                      'ruamel.yaml~=0.15','setuptools','scikit-image','scikit-learn',
-                      'scipy','six','statsmodels','tables',
-                      'tensorpack>=0.9.7.1',
-                      'tqdm','wheel'],
-    scripts=['deeplabcut/pose_estimation_tensorflow/models/pretrained/download.sh'],
-    packages=setuptools.find_packages(),
-    data_files=[('deeplabcut',['deeplabcut/pose_cfg.yaml','deeplabcut/pose_estimation_tensorflow/models/pretrained/pretrained_model_urls.yaml','deeplabcut/gui/media/logo.png','deeplabcut/gui/media/dlc_1-01.png'])],
-    include_package_data=True,
-    classifiers=(
+    url="https://github.com/bbo-lab/ACM-dlcdetect",
+    author="Arne Monsees, BBO lab",
+    author_email="bbo-admin@caesar.de",
+    license="LGPLv2+",
+    classifiers=[
+        "License :: OSI Approved :: GNU Lesser General Public License v2 or later (LGPLv2+)",
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU Lesser General Public License v3 (LGPLv3)",
-        "Operating System :: OS Independent",
-    ),
-    entry_points="""[console_scripts]
-            dlc=dlc:main""",
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+    ],
+    packages=['ACM'],
+    include_package_data=True,
+    install_requires=["deeplabcut==2.1","matplotlib","scikit-image","numpy","ffmpeg"],
 )
-
-#https://www.python.org/dev/peps/pep-0440/#compatible-release
+#DLC used originally: 2.1.6.4, but I hope minor version is sufficient

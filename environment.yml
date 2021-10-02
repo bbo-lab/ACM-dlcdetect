@@ -1,0 +1,13 @@
+name: bbo_acm_dlcdetect 
+channels:
+  - defaults
+dependencies:
+  - numpy
+  - python=3.7
+  - matplotlib
+  - pip
+  - ffmpeg
+  - pip:
+    - argparse
+    - deeplabcut==2.1 #DLC used originally: 2.1.6.4, but I hope minor version is sufficient
+    - scikit-image
