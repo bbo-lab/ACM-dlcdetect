@@ -15,10 +15,9 @@ dependencies:
   - pyyaml
   - ruamel
   - ruamel.yaml
-  - scikit-image
+  - scikit-image<0.19
   - scikit-learn
   - statsmodels
   - pip:
     - argparse
-    - scikit-image
     - easydict
