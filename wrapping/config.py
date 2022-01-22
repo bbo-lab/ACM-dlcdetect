@@ -1,8 +1,10 @@
 working_directory = 'data'
 date = '20210511'
 task = 'table_4'
-folderPath_ccv = '/ccv_files/'+date+'_'+task # folder in which the ccv-files need to be placed
-filePath_labels = '/manual_labels/'+date+'/'+task+'/labels.npz'
+#folderPath_ccv = '/ccv_files/'+date+'_'+task # folder in which the ccv-files need to be placed
+#filePath_labels = '/manual_labels/'+date+'/'+task+'/labels.npz'
+folderPath_ccv = f'/media/nfs/bbo3102/storage/bulk/pose_B.EG.1.09/experiments/{date}_{task}/' # folder in which the ccv-files need to be placed
+filePath_labels = f'/users/voit/Dropbox/Dropbox (NIG)/public_share/ACM/datasets_figures/required_files/{date}/{task}/labels.npz'
 
 mask_para = list() # will be overwritten 
 mask_para_offset = 0 # will be overwritten 
