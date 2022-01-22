@@ -9,7 +9,6 @@ Licensed under GNU Lesser General Public License v3.0
 """
 
 import sys
-sys.path.append('../')
 
 import os
 from pathlib import Path
@@ -17,7 +16,6 @@ import cv2
 import shutil
 import sys
 
-sys.path.append('../')
 from deeplabcut import DEBUG
 
 import config as cfg

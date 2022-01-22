@@ -5,11 +5,11 @@ import sys
 
 from pathlib import Path
 
-sys.path.append('../deeplabcut')
 from deeplabcut.utils import auxfun_models
 
+import deeplabcut
 import config as cfg
-import dlc_helper
+from . import dlc_helper
 
 def save_frames():  
     print('Saving frames')
@@ -196,8 +196,7 @@ def step4_wrap():
     Data=pd.read_hdf('CollectedData_'+cfg.task+'.h5', 'df_with_missing')[cfg.scorer]
     os.chdir(originalDirectory)
     
-    parent_path = Path(os.path.abspath(originalDirectory+'/../deeplabcut'))
-    model_path,num_shuffles=auxfun_models.Check4weights(cfg.net_type,parent_path,1) #if the model does not exist >> throws error!
+    model_path,num_shuffles=auxfun_models.Check4weights(cfg.net_type,Path(os.path.dirname(deeplabcut.__file__)),1) #if the model does not exist >> throws error!
     
     for shuffle in cfg.Shuffles:
         for trainFraction in cfg.TrainingFraction: 
@@ -308,7 +307,7 @@ def step4_wrap():
 
             trainingdata=MakeTrain_pose_yaml(items2change,
                                              os.path.abspath(experimentname+'/train/'+'pose_cfg.yaml'),
-                                             filename=os.path.abspath(originalDirectory+'/../deeplabcut/'+'pose_cfg.yaml'))
+                                             filename=os.path.abspath(os.path.dirname(deeplabcut.__file__)+'/pose_cfg.yaml'))
             
     os.chdir(originalDirectory)
     return

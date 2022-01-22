@@ -5,7 +5,7 @@ import sys
 import config as cfg
 
 #sys.path.append(os.path.abspath('../../python__ccv_read'))
-import ccv
+from . import ccv
 
 # used within generate_training_data.py to generate a training data set
 def calc_background(i_file,

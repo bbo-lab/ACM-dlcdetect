@@ -7,9 +7,9 @@ import skimage.color
 import sys
 
 sys.path.append(os.path.abspath(os.path.curdir))
-import config as cfg
-import dlc_helper
-import ccv
+from . import config as cfg
+from . import dlc_helper
+from . import ccv
 
 sys.path.append(os.path.abspath('../'))
 from deeplabcut.pose_estimation_tensorflow.nnet import predict

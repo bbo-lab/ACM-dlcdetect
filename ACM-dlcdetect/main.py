@@ -7,14 +7,13 @@ import sys
 #mpl.use('TkAgg')
 #import matplotlib.pyplot as plt
 
-sys.path.append(os.path.abspath('../'))
 import deeplabcut as dlc
 
 sys.path.append(os.path.abspath(os.path.curdir))
 import config as cfg
-import create
-import fill
-import save
+from . import create
+from . import fill
+from . import save
 
 def main():
     	# define path of config.yaml
