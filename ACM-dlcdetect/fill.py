@@ -240,7 +240,12 @@ def step4_wrap():
                 H['joints']=np.array(joints,dtype=int)
                 if np.size(joints)>0: #exclude images without labels
                     data.append(H)
-
+            
+            if len(data)==0:
+                raise NoManualLabelsError('No labelled data found in configured frame range')
+            else:
+                print(f"Using {len(data)} labelled frames.")            
+            
             os.chdir(bf)
             with open(filename_pickle+'.pickle', 'wb') as f:
                 # Pickle the 'data' dictionary using the highest protocol available.
@@ -311,3 +316,6 @@ def step4_wrap():
             
     os.chdir(originalDirectory)
     return
+
+class NoManualLabelsError(Exception):
+    pass

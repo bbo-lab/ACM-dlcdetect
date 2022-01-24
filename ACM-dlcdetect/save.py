@@ -7,7 +7,7 @@ import skimage.color
 import sys
 
 sys.path.append(os.path.abspath(os.path.curdir))
-from . import config as cfg
+import config as cfg
 from . import dlc_helper
 from . import ccv
 
