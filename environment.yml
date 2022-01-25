@@ -1,5 +1,6 @@
-name: bbo_acm_dlcdetect
+name: bbo_acm_dlcdetect-gpu
 channels:
+  - conda-forge
   - defaults
 dependencies:
   - numpy
@@ -7,16 +8,12 @@ dependencies:
   - matplotlib
   - pip
   - ffmpeg
-  - tensorflow<2.0
-  - scikit-image<0.19
-  - wxpython
-  - opencv
-  - pandas
-  - tqdm
-  - pyyaml
-  - ruamel
-  - ruamel.yaml
+  - cudnn=7
+  - jupyter
+  - nb_conda
+  - Shapely
   - pip:
-    - easydict
+    - bbo-ccvtools
+    - tensorflow-gpu==1.15.5
     - argparse
-    - deeplabcut==2.1.6.4 #DLC used originally: 2.1.6.4 - other version seem problematic
+    - deeplabcut<2.2 #DLC used originally: 2.1.6.4. For 2.1.1, this installs the headless version and --headless switch is not needed anymore
