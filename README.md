@@ -1,10 +1,11 @@
 # ACM (Anatomically-constrained model) dlc-detect wrapper
 Wrapper for DeepLabCut to take inputs from our manual-marking GUI and outputs compatible with ACM
+
 By Arne Monsees.
 
 ## Installation
 
-This software utilizes DeepLabCut 2.1, which dependends on tensorflow 1.15. The version that is installed requires CUDA 10.0 installed. The below for installation hints. If graphics support is not present, the software should automatically default to CPU computations, which will, however, be substantially slower.
+This software utilizes DeepLabCut 2.1, which dependends on tensorflow 1.15. The version that is installed by conda requires CUDA 10.0 installed. See below for installation hints. If graphics support is not present, the software should automatically default to CPU computations, which will, however, be substantially and potentially unfeasibly  slower.
 
 1. [Install Anaconda](https://docs.anaconda.com/anaconda/install/linux/)
 2. Clone https://github.com/bbo-lab/ACM-dlcdetect.git
