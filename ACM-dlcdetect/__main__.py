@@ -22,7 +22,7 @@ def main():
     if args.headless:
         os.environ['DLClight'] = 'True'
 
-    if not args.main:
+    if not args.nomain:
         from . import main
         main.main()
         

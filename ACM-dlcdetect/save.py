@@ -137,8 +137,8 @@ def main():
                     fig.canvas.draw()
                     plt.pause(2**-52)
         # save labels
-        file_save = cfg.working_directory+'/'+cfg.date+'-'+cfg.task+'/dlc_labels/'+\
-                    cfg.date+'/'+cfg.task+'/labels_dlc_{:06d}_{:06d}.npy'.format(index_frames[index][0], index_frames[index][1])
+        file_save = cfg.working_directory+'/'+cfg.date+'-'+cfg.task+'/dlc_labels/labels_dlc_{:06d}_{:06d}.npy'.format(index_frames[index][0], index_frames[index][1])
+        os.makedirs(os.path.dirname(file_save),exist_ok=True)
         dlc_labels = dict()
         dlc_labels['file_save'] = file_save
         dlc_labels['frame_list'] = frame_list
