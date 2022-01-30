@@ -127,3 +127,6 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+wrapping/data
+deeplabcut/pose_estimation_tensorflow/models/pretrained/resnet_v1_152.ckpt
