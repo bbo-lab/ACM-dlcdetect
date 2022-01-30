@@ -2,12 +2,11 @@ name: bbo_acm_dlcdetect-orig
 channels:
   - defaults
 dependencies:
-  - numpy
   - python=3.7
   - matplotlib
   - pip
   - ffmpeg
-  - tensorflow<2.0
+  - cudnn=7
   - wxpython
   - opencv
   - pandas
@@ -15,10 +14,11 @@ dependencies:
   - pyyaml
   - ruamel
   - ruamel.yaml
-  - scikit-image
-  - scikit-learn
-  - statsmodels
   - pip:
+    - statsmodels
+    - scikit-image<0.19
+    - scikit-learn
+    - numpy
+    - tensorflow-gpu==1.15.5
     - argparse
-    - scikit-image
     - easydict
