@@ -124,7 +124,7 @@ if __name__ == '__main__':
                                        i_cam, cfg.mask_para, cfg.mask_para_offset,
                                        backgrounds[i_cam], backgrounds_std[i_cam], cfg.noise_threshold,
                                        cfg.dxy, img_crop, pixel_crop)
-            
+
                 scmap, locref, labels = get_features(cfg_dlc, sess, inputs, outputs,
                                                      img_crop)
                 labels_use = np.copy(labels)
@@ -137,8 +137,13 @@ if __name__ == '__main__':
                     fig.canvas.draw()
                     plt.pause(2**-52)
         # save labels
-        file_save = '/dlc_labels/'+\
+        file_save = cfg.working_directory+'/'+cfg.date+'-'+cfg.task+'/dlc_labels/'+\
                     cfg.date+'/'+cfg.task+'/labels_dlc_{:06d}_{:06d}.npy'.format(index_frames[index][0], index_frames[index][1])
+        print(f"Saving labels to {file_save}")
+        try:
+            os.makedirs(os.path.dirname(file_save))
+        except:
+            pass
         dlc_labels = dict()
         dlc_labels['file_save'] = file_save
         dlc_labels['frame_list'] = frame_list
