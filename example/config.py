@@ -1,13 +1,23 @@
 import os
 
+# Basic config
 
+# Directory where output is placed 
+# Default: ./data relative to this config
 working_directory = f'{os.path.dirname(os.path.abspath(__file__))}/data'
 
+# Task name and date (TODO: Remove this in favor of proper config folders ...)
 date = '20210511'
 task = 'table_4'
-folderPath_ccv = f'/media/nfs/bbo3102/storage/bulk/pose_B.EG.1.09/experiments/{date}_{task}/' # folder in which the video files need to be placed
-filePath_labels = f'/users/voit/Dropbox/Dropbox (NIG)/public_share/ACM/datasets_figures/required_files/{date}/{task}/labels.npz'
 
+# Folder in which the video files need to be placed
+folderPath_ccv = f'/media/nfs/bbo3102/storage/bulk/pose_B.EG.1.09/experiments/20210511_table_4/' 
+# Path of the file with manual labels for training
+filePath_labels = f'/users/voit/Dropbox/Dropbox (NIG)/public_share/ACM/datasets_figures/required_files/20210511/table_4/labels.npz'
+
+# Video parameters (different parameters per video currently unsupported)
+xRes = 1280
+yRes = 1024
 frame_rate = 200
 
 # Training frame ranges (List of start and end frames, e.g. [[1 1000],[2001 3000]]). 
@@ -42,11 +52,12 @@ mask_para = list([
                     ]) # needs to be set manually (x1, y1, x2, y2, 'up'/'down')
 mask_para_offset = 0
 
+# DLC network type
+# Currently resnet_50, resnet_101, resnet_152, mobilenet_v2_1.0, mobilenet_v2_0.75, mobilenet_v2_0.5, and mobilenet_v2_0.35 are supported.
+# Default 'resnet_152' 
+net_type = 'resnet_152' 
 
 
-net_type = 'resnet_152' # Type of networks. Currently resnet_50, resnet_101, resnet_152, mobilenet_v2_1.0, mobilenet_v2_0.75, mobilenet_v2_0.5, and mobilenet_v2_0.35 are supported.
-xRes = 1280 # no need to change
-yRes = 1024 # no need to change
 dxy = 300
 nFrames_background = 100
 noise_threshold = 5.0 # is mutliplied by the background std to check if pixel is above noise level
