@@ -20,11 +20,14 @@ def save_frames():
     folderPath_save = cfg.working_directory+'/'+cfg.date+'-'+cfg.task+'/labeled-data'
     img_crop = np.zeros((2*cfg.dxy, 2*cfg.dxy), dtype=np.uint8)
     pixel_crop = np.zeros(2, dtype=np.float64)
-    framesList = np.array([], dtype=np.int64)
-    for i in range(np.size(cfg.index_frames, 0)):
-        framesList_single = np.arange(cfg.index_frames[i][0], cfg.index_frames[i][1] + cfg.dFrame, cfg.dFrame,
-                                      dtype=np.int64)
-        framesList = np.concatenate([framesList, framesList_single], 0)
+    
+    # Read labeled frames from cfg.filePath_labels
+    labels = np.load(cfg.filePath_labels,allow_pickle=True)['arr_0'].item()
+    framesList = np.asarray(sorted(labels.keys()));   
+    if len(cfg.index_frames)>0 # If set, filter by configures ranges
+        framesList = [ framesList[np.bitwise_and(framesList>=r[0], framesList<=r[1])] for r in cfg.index_frames ]
+        framesList = sorted([item for sublist in framesList for item in sublist])
+    
     nFrames = np.size(framesList)
     fileList = list()
     for file in np.sort(os.listdir(cfg.folderPath_ccv)):

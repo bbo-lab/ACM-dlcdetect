@@ -1,28 +1,21 @@
 import os
 
-# Directory for data output (default config places it in ./data relative to config file)
+
 working_directory = f'{os.path.dirname(os.path.abspath(__file__))}/data'
 
-# date and task for naming scheme (currently hardcoded)
 date = '20210511'
 task = 'table_4'
-
-# Folder with video files (supported formats via imageio)
-folderPath_ccv = f'/media/nfs/bbo3102/storage/bulk/pose_B.EG.1.09/experiments/{date}_{task}/'
-
-# Path to file with manual labels
+folderPath_ccv = f'/media/nfs/bbo3102/storage/bulk/pose_B.EG.1.09/experiments/{date}_{task}/' # folder in which the video files need to be placed
 filePath_labels = f'/users/voit/Dropbox/Dropbox (NIG)/public_share/ACM/datasets_figures/required_files/{date}/{task}/labels.npz'
 
-# Frame rate
 frame_rate = 200
 
-# Frame distance between manual labelling frames #TODO read actually labelled frames from filePath_labels and determine from there
-dFrame = 200
+# Training frame ranges (List of start and end frames, e.g. [[1 1000],[2001 3000]]). 
+# Default: [], all frames in filePath_labels are used.
+index_frames = []
 
-index_frames = list([[6400, 17000],
-                        [18000, 23000],
-                        [26000, 61800],
-                        [62900, 67100]])
+# Frame ranges to save labels for.
+# Example: [[1 1000],[2001 3000]])
 index_frames_save = list([[93600, 94800],
                             [102200, 103400],
                             [122400, 123400],
