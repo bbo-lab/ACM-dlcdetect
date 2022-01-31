@@ -116,17 +116,7 @@ def main():
         for i_cam in range(nCameras):
             reader = imageio.get_reader(fileList[i_cam])
             for i_frame in range(nFrames):
-            # ATTENTION: MAKE SURE THIS IS IDENTICAL TO fill.py
-#     #             if (cfg.task == 'arena'):
-#                 if (False):
-#                     dlc_helper.crop_image(reader, frame_list[i_frame],
-#                                           backgrounds[i_cam], backgrounds_std[i_cam], cfg.noise_threshold,
-#                                           cfg.dxy, img_crop, pixel_crop)
-#                 else: # used for 20200205 and 20200207
-#                     dlc_helper.crop_image2(reader, frame_list[i_frame],
-#                                            backgrounds[i_cam], backgrounds_std[i_cam], cfg.noise_threshold,
-#                                            cfg.dxy, img_crop, pixel_crop)
-                dlc_helper.crop_image3(reader, frame_list[i_frame],
+                dlc_helper.crop_image(reader, frame_list[i_frame],
                                        i_cam, cfg.mask_para, cfg.mask_para_offset,
                                        backgrounds[i_cam], backgrounds_std[i_cam], cfg.noise_threshold,
                                        cfg.dxy, img_crop, pixel_crop)

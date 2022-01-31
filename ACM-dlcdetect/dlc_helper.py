@@ -43,128 +43,14 @@ def calc_backgrounds(fileList,
                                                                      nFrames_background)
     return backgrounds, backgrounds_std
 
-# used for arena
+
 def crop_image(i_reader, i_frame,
-               i_background, i_background_std, noise_threshold,
-               dxy, img_crop, pixel_crop):
-    img_crop_shape = np.shape(img_crop)
-    img = i_reader.get_data(i_frame)
-    yRes, xRes = np.shape(img)
-    img = img.astype(np.float64)
-    img_bg = img - i_background
-    
-    mask_bg = (np.abs(img_bg) <= (noise_threshold * i_background_std))
-    img_mask = np.copy(img)
-    img_mask[mask_bg] = 0
-
-#     # in case I use the background substracted image
-#     const_bg = np.max(i_background_std)
-#     img_bg = img_bg + const_bg # add constant to not lose information for values below 0
-#     img_bg = img_bg.astype(np.uint8)
-    
-    index = np.where(img_mask > 0)
-    n = np.shape(index)[1]
-    index = np.concatenate([index[1], index[0]]).reshape(2, n).T
-    center_xy = np.median(index, 0).astype(np.int64)
-
-    xlim_min = center_xy[0] - dxy
-    xlim_max = center_xy[0] + dxy
-    ylim_min = center_xy[1] - dxy
-    ylim_max = center_xy[1] + dxy
-    xlim_min_use = np.max([xlim_min, 0])
-    xlim_max_use = np.min([xlim_max, xRes])
-    ylim_min_use = np.max([ylim_min, 0])
-    ylim_max_use = np.min([ylim_max, yRes])
-    dx = np.int64(xlim_max_use - xlim_min_use)
-    dy = np.int64(ylim_max_use - ylim_min_use)
-
-    center_xy_use = center_xy - np.array([xlim_min_use, ylim_min_use])
-    center_xy_use = dxy - center_xy_use
-    dx_add = center_xy_use[0]
-    dy_add = center_xy_use[1]
-    dx_add_int = np.int64(dx_add)
-    dy_add_int = np.int64(dy_add)
-    
-   # using the plain image
-    img_crop.fill(0)
-    img_crop[dy_add_int:dy+dy_add_int, dx_add_int:dx+dx_add_int] = \
-        img[ylim_min_use:ylim_max_use, xlim_min_use:xlim_max_use]
-#     img_crop[dy_add_int:dy+dy_add_int, dx_add_int:dx+dx_add_int] = \
-#         img_bg[ylim_min_use:ylim_max_use, xlim_min_use:xlim_max_use]        
-    # FIXME: this should save the float values of dx_add / dy_add! (is this the case though?)
-    pixel_crop[0] = -xlim_min_use + dx_add_int
-    pixel_crop[1] = -ylim_min_use + dy_add_int
-    return
-
-# used for table & gap [used for the first two two animals in the paper]
-def crop_image2(i_reader, i_frame,
-                i_background, i_background_std, noise_threshold,
-                dxy, img_crop, pixel_crop):
-    img_crop_shape = np.shape(img_crop)
-
-    if (cfg.task == 'arena'):
-        img0 = i_reader.get_data(i_frame - 20) # framerate: 100 Hz -> 200 ms delay
-    else:
-        img0 = i_reader.get_data(i_frame - 25) # framerate: 200 Hz -> 125 ms delay
-    img = i_reader.get_data(i_frame)
-    yRes, xRes = np.shape(img)
-    img_bg = img.astype(np.float64) - img0.astype(np.float64)
-    
-    mask_bg = (np.abs(img_bg) <= (noise_threshold * i_background_std))
-    img_mask = np.copy(img)
-    img_mask[mask_bg] = 0
-
-#     # in case I use the background substracted image
-#     const_bg = np.max(i_background_std)
-#     img_bg = img_bg + const_bg # add constant to not lose information for values below 0
-#     img_bg = img_bg.astype(np.uint8)
-    
-    index = np.where(img_mask > 0)
-    n = np.shape(index)[1]
-    index = np.concatenate([index[1], index[0]]).reshape(2, n).T
-    center_xy = np.median(index, 0).astype(np.int64)
-#     center_xy = np.mean(index, 0).astype(np.int64)
-
-    xlim_min = center_xy[0] - dxy
-    xlim_max = center_xy[0] + dxy
-    ylim_min = center_xy[1] - dxy
-    ylim_max = center_xy[1] + dxy
-    xlim_min_use = np.max([xlim_min, 0])
-    xlim_max_use = np.min([xlim_max, xRes])
-    ylim_min_use = np.max([ylim_min, 0])
-    ylim_max_use = np.min([ylim_max, yRes])
-    dx = np.int64(xlim_max_use - xlim_min_use)
-    dy = np.int64(ylim_max_use - ylim_min_use)
-
-    center_xy_use = center_xy - np.array([xlim_min_use, ylim_min_use])
-    center_xy_use = dxy - center_xy_use
-    dx_add = center_xy_use[0]
-    dy_add = center_xy_use[1]
-    dx_add_int = np.int64(dx_add)
-    dy_add_int = np.int64(dy_add)
-    
-   # using the plain image
-    img_crop.fill(0)
-    img_crop[dy_add_int:dy+dy_add_int, dx_add_int:dx+dx_add_int] = \
-        img[ylim_min_use:ylim_max_use, xlim_min_use:xlim_max_use]
-#     img_crop[dy_add_int:dy+dy_add_int, dx_add_int:dx+dx_add_int] = \
-#         img_bg[ylim_min_use:ylim_max_use, xlim_min_use:xlim_max_use]        
-    # FIXME: this should save the float values of dx_add / dy_add! (is this the case though?)
-    pixel_crop[0] = -xlim_min_use + dx_add_int
-    pixel_crop[1] = -ylim_min_use + dy_add_int
-    return
-
-# add masking of frames
-def crop_image3(i_reader, i_frame,
                 i_cam, mask_para, mask_para_offset,
                 i_background, i_background_std, noise_threshold,
                 dxy, img_crop, pixel_crop):
     img_crop_shape = np.shape(img_crop)
 
-    if (cfg.task == 'arena'):
-        img0 = i_reader.get_data(i_frame - 20) # framerate: 100 Hz -> 200 ms delay
-    else:
-        img0 = i_reader.get_data(i_frame - 25) # framerate: 200 Hz -> 125 ms delay
+    img0 = i_reader.get_data(i_frame - round(0.125*cfg.frame_rate)) # 125ms delay 
         
     img = i_reader.get_data(i_frame)
     img_bg = img.astype(np.float64) - img0.astype(np.float64)

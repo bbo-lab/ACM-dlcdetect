@@ -54,17 +54,8 @@ def save_frames():
         background_std = backgrounds_std[i_cam]
         for i_frame in range(nFrames):
             frame = framesList[i_frame]
-#             # ATTENTION: MAKE SURE THIS IS IDENTICAL TO save.py
-# #             if (cfg.task == 'arena'):
-#             if (False):
-#                 dlc_helper.crop_image(reader, frame,
-#                                       background, background_std, cfg.noise_threshold,
-#                                       cfg.dxy, img_crop, pixel_crop)
-#             else: # used for 20200205 and 20200207
-#                 dlc_helper.crop_image2(reader, frame,
-#                                       background, background_std, cfg.noise_threshold,
-#                                       cfg.dxy, img_crop, pixel_crop)
-            dlc_helper.crop_image3(reader, frame,
+
+            dlc_helper.crop_image(reader, frame,
                                    i_cam, cfg.mask_para, cfg.mask_para_offset,
                                    background, background_std, cfg.noise_threshold,
                                    cfg.dxy, img_crop, pixel_crop)
