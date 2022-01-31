@@ -6,11 +6,12 @@ import os
 import skimage.color
 import sys
 
+import imageio
+from ccvtools import rawio
+
 sys.path.append(os.path.abspath(os.path.curdir))
 import config as cfg
 from . import dlc_helper
-from . import ccv
-
 sys.path.append(os.path.abspath('../'))
 from deeplabcut.pose_estimation_tensorflow.nnet import predict
 from deeplabcut.pose_estimation_tensorflow.config import load_config
@@ -62,8 +63,12 @@ def main():
     print('Calculating background images')
     fileList = list()
     for file in np.sort(os.listdir(cfg.folderPath_ccv)):
-        if (file[-4:] == '.ccv'):
+        try:
+            reader = imageio.get_reader(file)
             fileList.append(cfg.folderPath_ccv+'/'+file)
+        except:
+            pass # No backend was found for respective file, thus not considered a video 
+        
     fileList = sorted(fileList)
     backgrounds, backgrounds_std = dlc_helper.calc_backgrounds(fileList,
                                                                cfg.xRes, cfg.yRes,
@@ -108,25 +113,26 @@ def main():
         nFrames = np.size(frame_list, 0)
         labels_all = np.full((nFrames, nCameras, nLabels, 3), np.nan, dtype=np.float64)
         print('Detecting features for frames\t{:06d} - {:06d}'.format(frame_list[0], frame_list[-1]))
-        for i_frame in range(nFrames):
+        for i_cam in range(nCameras):
+            reader = imageio.get_reader(fileList[i_cam])
+            for i_frame in range(nFrames):
             # ATTENTION: MAKE SURE THIS IS IDENTICAL TO fill.py
-            for i_cam in range(nCameras):
 #     #             if (cfg.task == 'arena'):
 #                 if (False):
-#                     dlc_helper.crop_image(fileList[i_cam], frame_list[i_frame],
+#                     dlc_helper.crop_image(reader, frame_list[i_frame],
 #                                           backgrounds[i_cam], backgrounds_std[i_cam], cfg.noise_threshold,
 #                                           cfg.dxy, img_crop, pixel_crop)
 #                 else: # used for 20200205 and 20200207
-#                     dlc_helper.crop_image2(fileList[i_cam], frame_list[i_frame],
+#                     dlc_helper.crop_image2(reader, frame_list[i_frame],
 #                                            backgrounds[i_cam], backgrounds_std[i_cam], cfg.noise_threshold,
 #                                            cfg.dxy, img_crop, pixel_crop)
-                dlc_helper.crop_image3(fileList[i_cam], frame_list[i_frame],
+                dlc_helper.crop_image3(reader, frame_list[i_frame],
                                        i_cam, cfg.mask_para, cfg.mask_para_offset,
                                        backgrounds[i_cam], backgrounds_std[i_cam], cfg.noise_threshold,
                                        cfg.dxy, img_crop, pixel_crop)
 
                 scmap, locref, labels = get_features(cfg_dlc, sess, inputs, outputs,
-                                                     img_crop)
+                                                     img_crop) #TODO move out od loop?
                 labels_use = np.copy(labels)
                 labels_use[:, :2] = labels_use[:, :2] - pixel_crop
                 labels_all[i_frame, i_cam] = np.copy(labels_use)

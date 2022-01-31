@@ -1,14 +1,22 @@
 import os
 
-
+# Directory for data output (default config places it in ./data relative to config file)
 working_directory = f'{os.path.dirname(os.path.abspath(__file__))}/data'
 
+# date and task for naming scheme (currently hardcoded)
 date = '20210511'
 task = 'table_4'
-folderPath_ccv = f'/media/nfs/bbo3102/storage/bulk/pose_B.EG.1.09/experiments/{date}_{task}/' # folder in which the ccv-files need to be placed
+
+# Folder with video files (supported formats via imageio)
+folderPath_ccv = f'/media/nfs/bbo3102/storage/bulk/pose_B.EG.1.09/experiments/{date}_{task}/'
+
+# Path to file with manual labels
 filePath_labels = f'/users/voit/Dropbox/Dropbox (NIG)/public_share/ACM/datasets_figures/required_files/{date}/{task}/labels.npz'
 
+# Frame rate
 frame_rate = 200
+
+# Frame distance between manual labelling frames #TODO read actually labelled frames from filePath_labels and determine from there
 dFrame = 200
 
 index_frames = list([[6400, 17000],

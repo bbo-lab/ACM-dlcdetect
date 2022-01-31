@@ -3,6 +3,9 @@ import os
 from skimage import io
 import sys
 
+import imageio
+from ccvtools import rawio
+
 from pathlib import Path
 
 from deeplabcut.utils import auxfun_models
@@ -25,8 +28,12 @@ def save_frames():
     nFrames = np.size(framesList)
     fileList = list()
     for file in np.sort(os.listdir(cfg.folderPath_ccv)):
-        if (file[-4:] == '.ccv'):
+        try:
+            reader = imageio.get_reader(file)
             fileList.append(cfg.folderPath_ccv+'/'+file)
+        except:
+            pass # No backend was found for respective file, thus not considered a video 
+        
     fileList = sorted(fileList)
     nCams = np.size(fileList)
     labels = np.load(cfg.filePath_labels, allow_pickle=True)['arr_0'].item()
@@ -39,7 +46,7 @@ def save_frames():
                                                                cfg.nFrames_background)
     
     for i_cam in range(nCams):
-        file = fileList[i_cam]
+        reader = imageio.get_reader(fileList[i_cam])
         background = backgrounds[i_cam]
         background_std = backgrounds_std[i_cam]
         for i_frame in range(nFrames):
@@ -47,14 +54,14 @@ def save_frames():
 #             # ATTENTION: MAKE SURE THIS IS IDENTICAL TO save.py
 # #             if (cfg.task == 'arena'):
 #             if (False):
-#                 dlc_helper.crop_image(file, frame,
+#                 dlc_helper.crop_image(reader, frame,
 #                                       background, background_std, cfg.noise_threshold,
 #                                       cfg.dxy, img_crop, pixel_crop)
 #             else: # used for 20200205 and 20200207
-#                 dlc_helper.crop_image2(file, frame,
+#                 dlc_helper.crop_image2(reader, frame,
 #                                       background, background_std, cfg.noise_threshold,
 #                                       cfg.dxy, img_crop, pixel_crop)
-            dlc_helper.crop_image3(file, frame,
+            dlc_helper.crop_image3(reader, frame,
                                    i_cam, cfg.mask_para, cfg.mask_para_offset,
                                    background, background_std, cfg.noise_threshold,
                                    cfg.dxy, img_crop, pixel_crop)

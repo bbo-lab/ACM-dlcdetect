@@ -2,19 +2,19 @@ import numpy as np
 import os
 import sys
 
+import imageio
+from ccvtools import rawio
+
 import config as cfg
 
-#sys.path.append(os.path.abspath('../../python__ccv_read'))
-from . import ccv
-
 # used within generate_training_data.py to generate a training data set
-def calc_background(i_file,
+def calc_background(i_reader,
                     xRes, yRes,
                     nFrames_background):
     mean_x = np.zeros((yRes, xRes), dtype=np.float64)
     mean_x2 = np.zeros((yRes, xRes), dtype=np.float64)
     for i_frame in range(nFrames_background):
-        img = ccv.get_frame(i_file, i_frame + 1)
+        img = i_reader.get_data(i_frame)
         img = img.astype(np.float64)
         mean_x = mean_x + (img / nFrames_background)
         mean_x2 = mean_x2 + (img**2 / nFrames_background)
@@ -37,17 +37,18 @@ def calc_backgrounds(fileList,
     backgrounds_std = np.zeros((nCams, yRes, xRes),
                                dtype=np.float64)
     for i_cam in range(nCams):
-        backgrounds[i_cam], backgrounds_std[i_cam] = calc_background(fileList[i_cam],
+        reader = imageio.get_reader(fileList[i_cam])
+        backgrounds[i_cam], backgrounds_std[i_cam] = calc_background(reader,
                                                                      xRes, yRes,
                                                                      nFrames_background)
     return backgrounds, backgrounds_std
 
 # used for arena
-def crop_image(i_file, i_frame,
+def crop_image(i_reader, i_frame,
                i_background, i_background_std, noise_threshold,
                dxy, img_crop, pixel_crop):
     img_crop_shape = np.shape(img_crop)
-    img = ccv.get_frame(i_file, i_frame + 1)
+    img = i_reader.get_data(i_frame)
     yRes, xRes = np.shape(img)
     img = img.astype(np.float64)
     img_bg = img - i_background
@@ -96,17 +97,16 @@ def crop_image(i_file, i_frame,
     return
 
 # used for table & gap [used for the first two two animals in the paper]
-def crop_image2(i_file, i_frame,
+def crop_image2(i_reader, i_frame,
                 i_background, i_background_std, noise_threshold,
                 dxy, img_crop, pixel_crop):
     img_crop_shape = np.shape(img_crop)
-#     img0 = ccv.get_frame(i_file, i_frame)
-#     img0 = ccv.get_frame(i_file, i_frame + 1 - cfg.frame_rate) # take frame 1 s before
+
     if (cfg.task == 'arena'):
-        img0 = ccv.get_frame(i_file, i_frame + 1 - 20) # framerate: 100 Hz -> 200 ms delay
+        img0 = i_reader.get_data(i_frame - 20) # framerate: 100 Hz -> 200 ms delay
     else:
-        img0 = ccv.get_frame(i_file, i_frame + 1 - 25) # framerate: 200 Hz -> 125 ms delay
-    img = ccv.get_frame(i_file, i_frame + 1)
+        img0 = i_reader.get_data(i_frame - 25) # framerate: 200 Hz -> 125 ms delay
+    img = i_reader.get_data(i_frame)
     yRes, xRes = np.shape(img)
     img_bg = img.astype(np.float64) - img0.astype(np.float64)
     
@@ -155,18 +155,18 @@ def crop_image2(i_file, i_frame,
     return
 
 # add masking of frames
-def crop_image3(i_file, i_frame,
+def crop_image3(i_reader, i_frame,
                 i_cam, mask_para, mask_para_offset,
                 i_background, i_background_std, noise_threshold,
                 dxy, img_crop, pixel_crop):
     img_crop_shape = np.shape(img_crop)
-#     img0 = ccv.get_frame(i_file, i_frame)
-#     img0 = ccv.get_frame(i_file, i_frame + 1 - cfg.frame_rate) # take frame 1 s before
+
     if (cfg.task == 'arena'):
-        img0 = ccv.get_frame(i_file, i_frame + 1 - 20) # framerate: 100 Hz -> 200 ms delay
+        img0 = i_reader.get_data(i_frame - 20) # framerate: 100 Hz -> 200 ms delay
     else:
-        img0 = ccv.get_frame(i_file, i_frame + 1 - 25) # framerate: 200 Hz -> 125 ms delay
-    img = ccv.get_frame(i_file, i_frame + 1)
+        img0 = i_reader.get_data(i_frame - 25) # framerate: 200 Hz -> 125 ms delay
+        
+    img = i_reader.get_data(i_frame)
     img_bg = img.astype(np.float64) - img0.astype(np.float64)
     yRes, xRes = np.shape(img_bg)
     
