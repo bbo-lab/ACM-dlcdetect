@@ -7,7 +7,7 @@ import skimage.color
 import sys
 
 sys.path.append(os.path.abspath(os.path.curdir))
-from . import config as cfg
+import config as cfg
 from . import dlc_helper
 from . import ccv
 
@@ -49,7 +49,7 @@ def get_features(cfg_dlc, sess, inputs, outputs,
     image_batch = data_to_input(skimage.color.gray2rgb(image))
     outputs_np = sess.run(outputs, feed_dict={inputs: image_batch})
     scmap, locref = predict.extract_cnn_output(outputs_np, cfg_dlc)
-    pose = predict.argmax_pose_predict(scmap, locref, cfg_dlc.stride)
+    pose = predict.argmax_pose_predict(scmap, locref, cfg_dlc['stride'])
     return scmap, locref, pose
 
 def main():
@@ -137,8 +137,8 @@ def main():
                     fig.canvas.draw()
                     plt.pause(2**-52)
         # save labels
-        file_save = '/dlc_labels/'+\
-                    cfg.date+'/'+cfg.task+'/labels_dlc_{:06d}_{:06d}.npy'.format(index_frames[index][0], index_frames[index][1])
+        file_save = cfg.working_directory+'/'+cfg.date+'-'+cfg.task+'/dlc_labels/labels_dlc_{:06d}_{:06d}.npy'.format(index_frames[index][0], index_frames[index][1])
+        os.makedirs(os.path.dirname(file_save),exist_ok=True)
         dlc_labels = dict()
         dlc_labels['file_save'] = file_save
         dlc_labels['frame_list'] = frame_list

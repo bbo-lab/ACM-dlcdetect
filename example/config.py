@@ -1,37 +1,47 @@
-working_directory = 'data'
+import os
+
+
+working_directory = f'{os.path.dirname(os.path.abspath(__file__))}/data'
+
 date = '20210511'
 task = 'table_4'
 folderPath_ccv = f'/media/nfs/bbo3102/storage/bulk/pose_B.EG.1.09/experiments/{date}_{task}/' # folder in which the ccv-files need to be placed
 filePath_labels = f'/users/voit/Dropbox/Dropbox (NIG)/public_share/ACM/datasets_figures/required_files/{date}/{task}/labels.npz'
 
-mask_para = list() # will be overwritten 
-mask_para_offset = 0 # will be overwritten 
-
 frame_rate = 200
 dFrame = 200
-                
-index_frames = list([[6900, 44300],]) # range present in labels file. should probably read from labels file by default.
-index_frames_save = list([[6900, 184000]])
 
-mask_para = list([ #???
-    [[15, 553, 772, 0, 'up'],
-    [809, 0, 1249, 626, 'up'],
-    [11, 565, 579, 978, 'down'],
-    [580, 979, 1249, 626, 'down']],
-    [[9, 491, 604, 0, 'up'],
-    [676, 12, 1240, 603, 'up'],
-    [4, 522, 609, 912, 'down'],
-    [608, 913, 1088, 700, 'down']],
-    [[122, 501, 932, 111, 'up'],
-    [945, 119, 1254, 714, 'up'],
-    [116, 514, 582, 942, 'down'],
-    [585, 943, 1252, 730, 'down']],
-    [[155, 700, 387, 127, 'up'],
-    [428, 135, 1250, 439, 'up'],
-    [156, 712, 826, 880, 'down'],
-    [834, 884, 1259, 455, 'down']],
-    ]) # needs to be set manually (x1, y1, x2, y2, 'up'/'down')
-mask_para_offset = 0 #???
+index_frames = list([[6400, 17000],
+                        [18000, 23000],
+                        [26000, 61800],
+                        [62900, 67100]])
+index_frames_save = list([[93600, 94800],
+                            [102200, 103400],
+                            [122400, 123400],
+                            [127800, 128400],
+                            [135500, 137200,],])
+
+mask_para = list([
+                    [[15, 553, 772, 0, 'up'],
+                    [809, 0, 1249, 626, 'up'],
+                    [11, 565, 579, 978, 'down'],
+                    [580, 979, 1249, 626, 'down']],
+                    [[9, 491, 604, 0, 'up'],
+                    [676, 12, 1240, 603, 'up'],
+                    [4, 522, 609, 912, 'down'],
+                    [608, 913, 1088, 700, 'down']],
+                    [[122, 501, 932, 111, 'up'], 
+                    [945, 119, 1254, 714, 'up'],
+                    [116, 514, 582, 942, 'down'],
+                    [585, 943, 1252, 730, 'down']],
+                    [[155, 700, 387, 127, 'up'], 
+                    [428, 135, 1250, 439, 'up'], 
+                    [156, 712, 826, 880, 'down'],
+                    [834, 884, 1259, 455, 'down']],
+                    ]) # needs to be set manually (x1, y1, x2, y2, 'up'/'down')
+mask_para_offset = 0
+
+
 
 net_type = 'resnet_152' # Type of networks. Currently resnet_50, resnet_101, resnet_152, mobilenet_v2_1.0, mobilenet_v2_0.75, mobilenet_v2_0.5, and mobilenet_v2_0.35 are supported.
 xRes = 1280 # no need to change

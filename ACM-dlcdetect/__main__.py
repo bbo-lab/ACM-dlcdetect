@@ -9,6 +9,8 @@ def main():
     parser.add_argument('INPUT_PATH', type=str, help="Directory with job configuration")
     parser.add_argument("--headless", action="store_true",
                     help="Run headless")
+    parser.add_argument("--nomain", action="store_true",
+                    help="Do not run preparation and training")
     args = parser.parse_args()
     input_path = os.path.expanduser(args.INPUT_PATH)
 
@@ -20,10 +22,11 @@ def main():
     if args.headless:
         os.environ['DLClight'] = 'True'
 
-    from . import main
+    if not args.nomain:
+        from . import main
+        main.main()
+        
     from . import save
-
-    main.main()
     save.main()
 
 if __name__ == '__main__':
