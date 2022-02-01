@@ -195,7 +195,6 @@ def step4_wrap():
 
     #Loading scorer's data:
     os.chdir(bf)
-    print(f"{bf}/{'CollectedData_'+cfg.task+'.h5'}")
     Data=pd.read_hdf('CollectedData_'+cfg.task+'.h5', 'df_with_missing')[cfg.scorer]
     os.chdir(originalDirectory)
     
