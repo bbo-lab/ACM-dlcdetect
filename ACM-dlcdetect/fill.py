@@ -24,7 +24,7 @@ def save_frames():
     # Read labeled frames from cfg.filePath_labels
     labels = np.load(cfg.filePath_labels,allow_pickle=True)['arr_0'].item()
     framesList = np.asarray(sorted(labels.keys()));   
-    if len(cfg.index_frames)>0 # If set, filter by configures ranges
+    if len(cfg.index_frames)>0: # If set, filter by configures ranges
         framesList = [ framesList[np.bitwise_and(framesList>=r[0], framesList<=r[1])] for r in cfg.index_frames ]
         framesList = sorted([item for sublist in framesList for item in sublist])
     
@@ -32,9 +32,10 @@ def save_frames():
     fileList = list()
     for file in np.sort(os.listdir(cfg.folderPath_ccv)):
         try:
-            reader = imageio.get_reader(file)
+            reader = imageio.get_reader(cfg.folderPath_ccv+'/'+file)
             fileList.append(cfg.folderPath_ccv+'/'+file)
         except:
+            print(f"No backend found for {file}")
             pass # No backend was found for respective file, thus not considered a video 
         
     fileList = sorted(fileList)
@@ -194,6 +195,7 @@ def step4_wrap():
 
     #Loading scorer's data:
     os.chdir(bf)
+    print(f"{bf}/{'CollectedData_'+cfg.task+'.h5'}")
     Data=pd.read_hdf('CollectedData_'+cfg.task+'.h5', 'df_with_missing')[cfg.scorer]
     os.chdir(originalDirectory)
     
