@@ -30,10 +30,10 @@ def save_frames():
     
     nFrames = np.size(framesList)
     fileList = list()
-    for file in np.sort(os.listdir(cfg.folderPath_ccv)):
+    for file in np.sort(os.listdir(cfg.folderPath_video)):
         try:
-            reader = imageio.get_reader(cfg.folderPath_ccv+'/'+file)
-            fileList.append(cfg.folderPath_ccv+'/'+file)
+            reader = imageio.get_reader(cfg.folderPath_video+'/'+file)
+            fileList.append(cfg.folderPath_video+'/'+file)
         except:
             print(f"No backend found for {file}")
             pass # No backend was found for respective file, thus not considered a video 

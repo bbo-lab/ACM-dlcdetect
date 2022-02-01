@@ -62,10 +62,10 @@ def main():
     # calculate backgrounds
     print('Calculating background images')
     fileList = list()
-    for file in np.sort(os.listdir(cfg.folderPath_ccv)):
+    for file in np.sort(os.listdir(cfg.folderPath_video)):
         try:
             reader = imageio.get_reader(file)
-            fileList.append(cfg.folderPath_ccv+'/'+file)
+            fileList.append(cfg.folderPath_video+'/'+file)
         except:
             pass # No backend was found for respective file, thus not considered a video 
         

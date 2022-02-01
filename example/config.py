@@ -11,7 +11,7 @@ date = '20210511'
 task = 'table_4'
 
 # Folder in which the video files need to be placed
-folderPath_ccv = f'/media/nfs/bbo3102/storage/bulk/pose_B.EG.1.09/experiments/20210511_table_4/' 
+folderPath_video = f'/media/nfs/bbo3102/storage/bulk/pose_B.EG.1.09/experiments/20210511_table_4/' 
 # Path of the file with manual labels for training
 filePath_labels = f'/users/voit/Dropbox/Dropbox (NIG)/public_share/ACM/datasets_figures/required_files/20210511/table_4/labels.npz'
 
@@ -31,6 +31,9 @@ index_frames_save = list([[93600, 94800],
                             [122400, 123400],
                             [127800, 128400],
                             [135500, 137200,],])
+
+# Processing area: +/-dxy pixels around center of nonmasked area are processed
+dxy = 300
 
 mask_para = list([
                     [[15, 553, 772, 0, 'up'],
@@ -58,7 +61,7 @@ mask_para_offset = 0
 net_type = 'resnet_152' 
 
 
-dxy = 300
+
 nFrames_background = 100
 noise_threshold = 5.0 # is mutliplied by the background std to check if pixel is above noise level
 feat_list = list(['spot_ankle_left',
