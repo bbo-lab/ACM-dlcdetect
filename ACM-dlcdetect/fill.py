@@ -11,7 +11,7 @@ from pathlib import Path
 from deeplabcut.utils import auxfun_models
 
 import deeplabcut
-import config as cfg
+import dlcdetectConfig as cfg
 from . import dlc_helper
 
 def save_frames():  

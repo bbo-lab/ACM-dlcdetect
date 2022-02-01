@@ -18,7 +18,7 @@ import sys
 
 from deeplabcut import DEBUG
 
-import config as cfg
+import dlcdetectConfig as cfg
 
 def create_new_project():
     """

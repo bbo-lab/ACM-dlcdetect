@@ -10,7 +10,7 @@ import sys
 import deeplabcut as dlc
 
 sys.path.append(os.path.abspath(os.path.curdir))
-import config as cfg
+import dlcdetectConfig as cfg
 from . import create
 from . import fill
 from . import save

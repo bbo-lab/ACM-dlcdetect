@@ -10,7 +10,7 @@ import imageio
 from ccvtools import rawio
 
 sys.path.append(os.path.abspath(os.path.curdir))
-import config as cfg
+import dlcdetectConfig as cfg
 from . import dlc_helper
 sys.path.append(os.path.abspath('../'))
 from deeplabcut.pose_estimation_tensorflow.nnet import predict

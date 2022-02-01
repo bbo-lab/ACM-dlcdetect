@@ -5,7 +5,7 @@ import sys
 import imageio
 from ccvtools import rawio
 
-import config as cfg
+import dlcdetectConfig as cfg
 
 # used within generate_training_data.py to generate a training data set
 def calc_background(i_reader,
