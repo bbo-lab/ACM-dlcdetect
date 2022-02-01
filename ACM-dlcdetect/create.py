@@ -24,20 +24,9 @@ def create_new_project():
     """
     Creates a new project directory, sub-directories and a basic configuration file. The configuration file is loaded with the default values. Change its parameters to your projects need.
 
-    Parameters
-    ----------
-    project : string
-        String containing the name of the project.
-
-    experimenter : string
-        String containing the name of the experimenter.
-
-    working_directory : string, optional
-        The directory where the project will be created. The default is the ``current working directory``; if provided, it must be a string.
     """
     
-    project = cfg.date
-    experimenter = cfg.task
+    project = os.path.basename(os.path.dirname(cfg.__file__))
     working_directory = cfg.working_directory
     
     from datetime import datetime as dt
@@ -50,9 +39,7 @@ def create_new_project():
     if working_directory == None:
         working_directory = '.'
     wd = Path(working_directory).resolve()
-#     project_name = '{pn}-{exp}-{date}'.format(pn=project, exp=experimenter, date=date)
-    project_name = '{pn}-{exp}'.format(pn=project, exp=experimenter)
-    project_path = wd / project_name
+    project_path = wd
     
     # Create project and sub-directories
     if not DEBUG and project_path.exists():
@@ -67,86 +54,10 @@ def create_new_project():
         p.mkdir(parents=True, exist_ok=DEBUG)
         print('Created "{}"'.format(p))
 
-#     # Add all videos in the folder. Multiple folders can be passed in a list, similar to the video files. Folders and video files can also be passed!
-#     vids = []
-#     for i in videos:
-#         #Check if it is a folder
-#         if os.path.isdir(i):
-#             vids_in_dir = [os.path.join(i,vp) for vp in os.listdir(i) if videotype in vp]
-#             vids = vids + vids_in_dir
-#             if len(vids_in_dir)==0:
-#                 print("No videos found in",i)
-#                 print("Perhaps change the videotype, which is currently set to:", videotype)
-#             else:
-#                 videos = vids
-#                 print(len(vids_in_dir)," videos from the directory" ,i, "were added to the project.")
-#         else:
-#             if os.path.isfile(i):
-#                 vids = vids + [i]
-#             videos = vids
-
-#     videos = [Path(vp) for vp in videos]
-#     dirs = [data_path/Path(i.stem) for i in videos]
-#     for p in dirs:
-#         """
-#         Creates directory under data
-#         """
-#         p.mkdir(parents = True, exist_ok = True)
-
-#     destinations = [video_path.joinpath(vp.name) for vp in videos]
-#     if copy_videos==True:
-#         print("Copying the videos")
-#         for src, dst in zip(videos, destinations):
-#             shutil.copy(os.fspath(src),os.fspath(dst)) #https://www.python.org/dev/peps/pep-0519/
-#     else:
-#       # creates the symlinks of the video and puts it in the videos directory.
-#         print("Attempting to create a symbolic link of the video ...")
-#         for src, dst in zip(videos, destinations):
-#             if dst.exists() and not DEBUG:
-#                 raise FileExistsError('Video {} exists already!'.format(dst))
-#             try:
-#                 src = str(src)
-#                 dst = str(dst)
-#                 os.symlink(src, dst)
-#             except OSError:
-#                 import subprocess
-#                 subprocess.check_call('mklink %s %s' %(dst,src),shell = True)
-#             print('Created the symlink of {} to {}'.format(src, dst))
-#             videos = destinations
-            
-#     if copy_videos==True:
-#         videos=destinations # in this case the *new* location should be added to the config file
-
-#     # adds the video list to the config.yaml file
-#     video_sets = {}
-#     for video in videos:
-#         print(video)
-#         try:
-#            # For windows os.path.realpath does not work and does not link to the real video. [old: rel_video_path = os.path.realpath(video)]
-#            rel_video_path = str(Path.resolve(Path(video)))
-#         except:
-#            rel_video_path = os.readlink(str(video))
-
-#         vcap = cv2.VideoCapture(rel_video_path)
-#         if vcap.isOpened():
-#            width = int(vcap.get(cv2.CAP_PROP_FRAME_WIDTH))
-#            height = int(vcap.get(cv2.CAP_PROP_FRAME_HEIGHT))
-#            video_sets[rel_video_path] = {'crop': ', '.join(map(str, [0, width, 0, height]))}
-#         else:
-#            print("Cannot open the video file! Skipping to the next one...")
-#            os.remove(video)  # Removing the video or link from the project
-
-#     if not len(video_sets):
-#         # Silently sweep the files that were already written.
-#         shutil.rmtree(project_path, ignore_errors=True)
-#         print('WARNING: No valid videos were found. The project was not created ...')
-#         print('Verify the video files and re-create the project.')
-#         return 'nothingcreated'
-
     #        Set values to config file:
     cfg_file,ruamelFile = auxiliaryfunctions.create_config_template()
     cfg_file['Task']=project
-    cfg_file['scorer']=experimenter
+    cfg_file['scorer']=cfg.scorer
 #     cfg_file['video_sets']=video_sets
     cfg_file['project_path']=str(project_path)
     cfg_file['date']=''
@@ -186,10 +97,10 @@ def create_new_project():
 # create remaining folder structure
 def create_missing_folders():
     originalDirectory = os.path.abspath(os.getcwd())
-    mainDirectory = os.path.abspath(cfg.working_directory+'/'+cfg.date+'-'+cfg.task)
+    mainDirectory = os.path.abspath(cfg.working_directory)
 
     os.mkdir(mainDirectory+'/dlc-models'+'/iteration-{:d}'.format(cfg.iteration))
     os.mkdir(mainDirectory+'/training-datasets'+'/iteration-{:d}'.format(cfg.iteration)) # add subfolder and subfolder/train folder
-    os.mkdir(mainDirectory+'/training-datasets'+'/iteration-{:d}'.format(cfg.iteration)+'/UnaugmentedDataSet_'+cfg.date) # csv, h5, pickle, mat files
+    os.mkdir(mainDirectory+'/training-datasets'+'/iteration-{:d}'.format(cfg.iteration)+'/UnaugmentedDataSet') # csv, h5, pickle, mat files
     
     return

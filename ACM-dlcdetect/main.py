@@ -17,7 +17,7 @@ from . import save
 
 def main():
     	# define path of config.yaml
-	config_path = os.path.abspath(cfg.working_directory+'/'+cfg.date+'-'+cfg.task+'/config.yaml')
+	config_path = os.path.abspath(cfg.working_directory+'/config.yaml')
 
 	# create folders
 	create.create_new_project()

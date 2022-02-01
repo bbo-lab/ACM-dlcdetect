@@ -19,13 +19,12 @@ from deeplabcut.pose_estimation_tensorflow.dataset.pose_dataset import data_to_i
 
 # can be used to get features/heatmaps from trained network
 def prepare_feature_extraction():
-    mainDirectory = os.path.abspath(cfg.working_directory+'/'+cfg.date+'-'+cfg.task)
+    mainDirectory = os.path.abspath(cfg.working_directory)
 
     ####################################################
     # Loading data, and defining model folder
     ####################################################
-    modelfolder = mainDirectory+'/dlc-models'+'/iteration-{:d}'.format(cfg.iteration)+'/'+ \
-                  cfg.date+'-trainset'+str(int(cfg.TrainingFraction[0]*100))+'shuffle'+str(cfg.Shuffles[0])
+    modelfolder = mainDirectory+'/dlc-models'+'/iteration-{:d}'.format(cfg.iteration)+'/trainset'+str(int(cfg.TrainingFraction[0]*100))+'shuffle'+str(cfg.Shuffles[0])
     cfg_dlc = load_config(modelfolder + '/train/' + "pose_cfg.yaml")
 
     ##################################################
@@ -133,7 +132,7 @@ def main():
                     fig.canvas.draw()
                     plt.pause(2**-52)
         # save labels
-        file_save = cfg.working_directory+'/'+cfg.date+'-'+cfg.task+'/dlc_labels/labels_dlc_{:06d}_{:06d}.npy'.format(index_frames[index][0], index_frames[index][1])
+        file_save = cfg.working_directory+'/dlc_labels/labels_dlc_{:06d}_{:06d}.npy'.format(index_frames[index][0], index_frames[index][1])
         os.makedirs(os.path.dirname(file_save),exist_ok=True)
         dlc_labels = dict()
         dlc_labels['file_save'] = file_save

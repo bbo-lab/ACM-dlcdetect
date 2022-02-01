@@ -17,7 +17,7 @@ from . import dlc_helper
 def save_frames():  
     print('Saving frames')
 
-    folderPath_save = cfg.working_directory+'/'+cfg.date+'-'+cfg.task+'/labeled-data'
+    folderPath_save = cfg.working_directory+'/labeled-data'
     img_crop = np.zeros((2*cfg.dxy, 2*cfg.dxy), dtype=np.uint8)
     pixel_crop = np.zeros(2, dtype=np.float64)
     
@@ -101,11 +101,11 @@ def step2_wrap():
     print('Executing wrapping function for DeepLabCut\'s step 2')
         
     originalDirectory = os.path.abspath(os.getcwd())
-    mainDirectory = os.path.abspath(cfg.working_directory+'/'+cfg.date+'-'+cfg.task)
+    mainDirectory = os.path.abspath(cfg.working_directory)
     
-    label_dict = np.load(cfg.working_directory+'/'+cfg.date+'-'+cfg.task+'/labeled-data/labels.npy', allow_pickle=True).item()
+    label_dict = np.load(cfg.working_directory+'/labeled-data/labels.npy', allow_pickle=True).item()
     
-    folderPath_files = cfg.working_directory+'/'+cfg.date+'-'+cfg.task+'/labeled-data'
+    folderPath_files = cfg.working_directory+'/labeled-data'
     os.chdir(folderPath_files)
     # sort image file names according to how they were stacked
     files=[fn for fn in os.listdir(os.curdir) if ('cam' in fn and \
@@ -137,10 +137,10 @@ def step2_wrap():
 
         DataSingleUser = Frame
 
-    folderPath_labels = os.path.abspath(mainDirectory+'/training-datasets'+'/iteration-{:d}'.format(cfg.iteration)+'/UnaugmentedDataSet_'+cfg.date)
+    folderPath_labels = os.path.abspath(mainDirectory+'/training-datasets'+'/iteration-{:d}'.format(cfg.iteration)+'/UnaugmentedDataSet')
     os.chdir(folderPath_labels)
-    DataSingleUser.to_csv("CollectedData_"+cfg.task+".csv") #breaks multi-indices HDF5 tables better!
-    DataSingleUser.to_hdf('CollectedData_'+cfg.task+'.h5', 'df_with_missing',format = 'table', mode='w') 
+    DataSingleUser.to_csv("CollectedData.csv") #breaks multi-indices HDF5 tables better!
+    DataSingleUser.to_hdf('CollectedData.h5', 'df_with_missing',format = 'table', mode='w') 
     os.chdir(originalDirectory)
     return    
 
@@ -149,7 +149,7 @@ def step4_wrap():
     print('Executing wrapping function for DeepLabCut\'s step 4')
 
     originalDirectory = os.path.abspath(os.getcwd())
-    mainDirectory = os.path.abspath(cfg.working_directory+'/'+cfg.date+'-'+cfg.task)
+    mainDirectory = os.path.abspath(cfg.working_directory)
     imgDirectory = os.path.abspath(mainDirectory+'/labeled-data')
 
     def SplitTrials(trialindex, trainFraction):
@@ -191,11 +191,11 @@ def step4_wrap():
         with open(saveasfile, "w") as f:
             yaml.dump(dict_test, f)
     
-    bf=os.path.abspath(mainDirectory+'/training-datasets'+'/iteration-{:d}'.format(cfg.iteration)+'/UnaugmentedDataSet_'+cfg.date)
+    bf=os.path.abspath(mainDirectory+'/training-datasets'+'/iteration-{:d}'.format(cfg.iteration)+'/UnaugmentedDataSet')
 
     #Loading scorer's data:
     os.chdir(bf)
-    Data=pd.read_hdf('CollectedData_'+cfg.task+'.h5', 'df_with_missing')[cfg.scorer]
+    Data=pd.read_hdf('CollectedData.h5', 'df_with_missing')[cfg.scorer]
     os.chdir(originalDirectory)
     
     model_path,num_shuffles=auxfun_models.Check4weights(cfg.net_type,Path(os.path.dirname(deeplabcut.__file__)),1) #if the model does not exist >> throws error!
@@ -203,8 +203,8 @@ def step4_wrap():
     for shuffle in cfg.Shuffles:
         for trainFraction in cfg.TrainingFraction: 
             trainIndexes, testIndexes=SplitTrials(range(len(Data.index)), trainFraction)
-            filename_matfile=cfg.task+"_"+cfg.scorer+str(int(100*trainFraction))+"shuffle"+str(shuffle)
-            filename_pickle="Documentation_"+'data-'+cfg.date+"_"+str(int(trainFraction*100))+"shuffle"+str(shuffle)
+            filename_matfile="MatlabData_"+cfg.scorer+str(int(100*trainFraction))+"shuffle"+str(shuffle)
+            filename_pickle="Documentation_"+'data_'+str(int(trainFraction*100))+"shuffle"+str(shuffle)
 
             ####################################################
             ######## Generating data structure with labeled information & frame metadata (for DeeperCut)
@@ -271,8 +271,7 @@ def step4_wrap():
             ######### Test files as well as pose_yaml files (containing training and testing information)
             #################################################################################
 
-            experimentname=mainDirectory+'/dlc-models'+'/iteration-{:d}'.format(cfg.iteration)+'/'+ \
-                           cfg.date+'-trainset'+str(int(trainFraction*100))+'shuffle'+str(shuffle)
+            experimentname=mainDirectory+'/dlc-models'+'/iteration-{:d}'.format(cfg.iteration)+'/trainset'+str(int(trainFraction*100))+'shuffle'+str(shuffle)
             try:
                 os.mkdir(experimentname)
                 os.mkdir(experimentname+'/train')

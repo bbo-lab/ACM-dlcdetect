@@ -1,14 +1,8 @@
 import os
 
-# Basic config
-
 # Directory where output is placed 
 # Default: ./data relative to this config
 working_directory = f'{os.path.dirname(os.path.abspath(__file__))}/data'
-
-# Task name and date (TODO: Remove this in favor of proper config folders ...)
-date = '20210511'
-task = 'table_4'
 
 # Folder in which the video files need to be placed
 folderPath_video = f'/media/nfs/bbo3102/storage/bulk/pose_B.EG.1.09/experiments/20210511_table_4/' 
@@ -35,6 +29,14 @@ index_frames_save = list([[93600, 94800],
 # Processing area: +/-dxy pixels around center of nonmasked area are processed
 dxy = 300
 
+# Masks to apply to an image. Each entry consists of two image coordinates x1/y1/x2/y2 and 'up'/'down' keywords.
+# From these, a line through the two points is constructed and the area above ('up') or below ('down') is masked.
+# The outer list corresponds to the video files from folderPath_video in alphabetical order. The inner lists are 
+# lists of lines.
+# Example: mask_para = [ [], [[0, 924, 100, 1024, 'down'],[1180, 1024, 1280, 924, 'down']], [], [] ]
+#                        V1  V2                                                             V3  V4
+#                             L1                          L2
+#    masks the bottom corners in the 2nd of 4 videos
 mask_para = list([
                     [[15, 553, 772, 0, 'up'],
                     [809, 0, 1249, 626, 'up'],
@@ -60,10 +62,15 @@ mask_para_offset = 0
 # Default 'resnet_152' 
 net_type = 'resnet_152' 
 
-
-
+# Number of frames from the beginning of each video to calculate a background and background_std from
 nFrames_background = 100
-noise_threshold = 5.0 # is mutliplied by the background std to check if pixel is above noise level
+
+# Faktor multiplied by the background std to calc threshold for checking if interframe pixel difference is above noise level
+noise_threshold = 5.0 
+
+
+# =========== Do not change anything below ===========
+
 feat_list = list(['spot_ankle_left',
                   'spot_ankle_right',
                   'spot_elbow_left',
@@ -106,9 +113,9 @@ feat_list = list(['spot_ankle_left',
                   'spot_toe_left_003',
                   'spot_toe_right_001',
                   'spot_toe_right_002',
-                  'spot_toe_right_003']) # hard coded
+                  'spot_toe_right_003']) # hard coded - why are these not read from the manual labels file?
 
-scorer = 'monsees' # do not change
+scorer = 'monsees' 
 Shuffles = [1] # do not change
 TrainingFraction = [1.00] # do not change
 iteration = 0 # do not change
