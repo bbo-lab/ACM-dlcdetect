@@ -1,8 +1,8 @@
 import os
 
 # Directory where output is placed 
-# Default: ./data relative to this config
-working_directory = f'{os.path.dirname(os.path.abspath(__file__))}/data'
+# Default: ./dlcdetect-data relative to this config
+working_directory = f'{os.path.dirname(os.path.abspath(__file__))}/dlcdetect-data'
 
 # Folder in which the video files need to be placed
 folderPath_video = f'/media/nfs/bbo3102/storage/bulk/pose_B.EG.1.09/experiments/20210511_table_4/' 

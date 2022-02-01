@@ -271,7 +271,7 @@ def step4_wrap():
             ######### Test files as well as pose_yaml files (containing training and testing information)
             #################################################################################
 
-            experimentname=mainDirectory+'/dlc-models'+'/iteration-{:d}'.format(cfg.iteration)+'/trainset'+str(int(trainFraction*100))+'shuffle'+str(shuffle)
+            experimentname=mainDirectory+'/dlc-models'+'/iteration-{:d}'.format(cfg.iteration)+'/'+os.path.basename(os.path.dirname(cfg.__file__))+'-trainset'+str(int(trainFraction*100))+'shuffle'+str(shuffle)
             try:
                 os.mkdir(experimentname)
                 os.mkdir(experimentname+'/train')

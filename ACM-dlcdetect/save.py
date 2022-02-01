@@ -24,7 +24,7 @@ def prepare_feature_extraction():
     ####################################################
     # Loading data, and defining model folder
     ####################################################
-    modelfolder = mainDirectory+'/dlc-models'+'/iteration-{:d}'.format(cfg.iteration)+'/trainset'+str(int(cfg.TrainingFraction[0]*100))+'shuffle'+str(cfg.Shuffles[0])
+    modelfolder = mainDirectory+'/dlc-models'+'/iteration-{:d}'.format(cfg.iteration)+'/'+os.path.basename(os.path.dirname(cfg.__file__))+'-trainset'+str(int(cfg.TrainingFraction[0]*100))+'shuffle'+str(cfg.Shuffles[0])
     cfg_dlc = load_config(modelfolder + '/train/' + "pose_cfg.yaml")
 
     ##################################################
