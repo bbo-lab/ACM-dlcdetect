@@ -128,7 +128,7 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
-*.kate-swp
+*swp
 
 ACM-dlcdetect/test/
 example/data*

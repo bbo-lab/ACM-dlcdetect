@@ -63,7 +63,7 @@ def main():
     fileList = list()
     for file in np.sort(os.listdir(cfg.folderPath_video)):
         try:
-            reader = imageio.get_reader(file)
+            reader = imageio.get_reader(cfg.folderPath_video+'/'+file)
             fileList.append(cfg.folderPath_video+'/'+file)
         except:
             pass # No backend was found for respective file, thus not considered a video 
@@ -105,16 +105,21 @@ def main():
     cfg_dlc, sess, inputs, outputs = prepare_feature_extraction()
     # start feature extraction
     print('Starting feature detection')
+    print(index_frames)
     nIndex = np.size(index_frames, 0)
     for index in range(nIndex):
         frame_list = np.arange(index_frames[index][0], index_frames[index][1] + dFrame, dFrame,
                                dtype=np.int64)
         nFrames = np.size(frame_list, 0)
+        print(frame_list)
         labels_all = np.full((nFrames, nCameras, nLabels, 3), np.nan, dtype=np.float64)
-        print('Detecting features for frames\t{:06d} - {:06d}'.format(frame_list[0], frame_list[-1]))
+        print('Detecting features for frames\t{:06d} - {:06d} ({:d} cams, {:d} frames)'.format(frame_list[0], frame_list[-1],nCameras,nFrames))
         for i_cam in range(nCameras):
             reader = imageio.get_reader(fileList[i_cam])
+            print()
+            print(f'c{i_cam}')
             for i_frame in range(nFrames):
+                print('.',end='',flush=True)
                 dlc_helper.crop_image(reader, frame_list[i_frame],
                                        i_cam, cfg.mask_para, cfg.mask_para_offset,
                                        backgrounds[i_cam], backgrounds_std[i_cam], cfg.noise_threshold,
