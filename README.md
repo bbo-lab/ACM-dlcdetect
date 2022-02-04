@@ -1,6 +1,6 @@
 # ACM (Anatomically-constrained model) dlc-detect wrapper
 Wrapper for DeepLabCut to take inputs from our manual-marking GUI and outputs compatible with ACM.
-For productive application, please use the [latest tag version](https://github.com/bbo-lab/ACM-dlcdetect/tags).
+For productive application, please use the [latest tag release](https://github.com/bbo-lab/ACM-dlcdetect/tags).
 
 By Arne Monsees.
 
