@@ -12,6 +12,7 @@ dependencies:
   - jupyter
   - nb_conda
   - Shapely
+  - cudatoolkit=10.0
   - pip:
     - bbo-ccvtools
     - tensorflow-gpu==1.15.5
