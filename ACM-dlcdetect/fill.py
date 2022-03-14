@@ -23,7 +23,8 @@ def save_frames():
     
     # Read labeled frames from cfg.filePath_labels
     labels = np.load(cfg.filePath_labels,allow_pickle=True)['arr_0'].item()
-    framesList = np.asarray(sorted(labels.keys()));   
+    framesList = np.asarray(sorted(labels.keys()));  
+    framesList = framesList[framesList>100] # TODO we cannot start at 0 as we remove background with prefious frames. clean up!
     if len(cfg.index_frames)>0: # If set, filter by configures ranges
         framesList = [ framesList[np.bitwise_and(framesList>=r[0], framesList<=r[1])] for r in cfg.index_frames ]
         framesList = sorted([item for sublist in framesList for item in sublist])
@@ -48,7 +49,6 @@ def save_frames():
     backgrounds, backgrounds_std = dlc_helper.calc_backgrounds(fileList,
                                                                cfg.xRes, cfg.yRes,
                                                                cfg.nFrames_background)
-    
     for i_cam in range(nCams):
         reader = imageio.get_reader(fileList[i_cam])
         background = backgrounds[i_cam]
