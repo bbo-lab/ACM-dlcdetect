@@ -20,19 +20,7 @@ Later versions of DLC 2.1 are separated into the pip packages `deeplabcut` and `
 
 ### CUDA
 
-CUDA 10.0 is not shipped with the current LTS release Ubuntu 20.04. We have successfully managed to install it using the following steps:
-
-1. Download the "runfile (local)" for version 10.0 from the NVIDIA CUDA Toolkit Archive.
-2. Run with  `--override` switch for "incompatible" compiler.
-3. Accept installation in unsupported environment.
-4. Do not install the driver.
-5. Do not create the cuda link.
-6. Before running the module, add respective paths to the environment.
-
-```
-export LD_LIBRARY_PATH=/usr/local/cuda-10.0/lib64:$LD_LIBRARY_PATH
-export PATH=/usr/local/cuda-10.0/bin:$PATH 
-```
+CUDA in the correct version is included in the conda environment and should run out of the box.
 
 ## Usage
 
