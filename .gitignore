@@ -132,3 +132,4 @@ dmypy.json
 
 ACM-dlcdetect/test/
 example/data*
+.idea/*
