@@ -27,6 +27,6 @@ CUDA in the correct version is included in the conda environment and should run 
 1. Create a folder corresponding to your dataset (e.g. `~/data/YYYYMMDD_exp1`). 
 2. Adjust and add to this folder the config file in `examples/`. Especially, set path for manual labels and video files, and update frame ranges.
 3. Enter conda environment with `conda activate bbo_acm_dlcdetect-gpu`
-4. Run with `python -m ACM-dlcdetect ~/data/YYYYMMDD_exp1`
+4. Run with `python -m ACMdlcdetect ~/data/YYYYMMDD_exp1`
 
-Note that the process will fail if the algorithm has already been (fully or partially) run on this folder. In this case, delete `examples/data` recursively.
+Note that the process will fail if the algorithm has already been (fully or partially) run on this folder. In this case, delete `~/data/YYYYMMDD_exp1/data` recursively.

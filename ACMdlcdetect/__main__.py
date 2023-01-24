@@ -23,10 +23,10 @@ def main():
         os.environ['DLClight'] = 'True'
 
     if not args.nomain:
-        from . import main
+        from ACMdlcdetect import main
         main.main()
         
-    from . import save
+    from ACMdlcdetect import save
     save.main()
 
 if __name__ == '__main__':
