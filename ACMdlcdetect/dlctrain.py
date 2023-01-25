@@ -73,7 +73,7 @@ class DLCtrain:
         print('Saving frames')
 
         folderPath_save = self.config["working_directory"] + '/labeled-data'
-        pixel_crop = np.zeros(2, dtype=np.float64)
+        crop_offset = np.zeros(2, dtype=np.float64)
 
         # Read labeled frames from self.config["filePath_labels"]
         labels = self.labels
@@ -113,8 +113,8 @@ class DLCtrain:
                                                                    self.config["xRes"], self.config["yRes"],
                                                                    self.config["nFrames_background"])
         img_crop_shape = list(backgrounds.shape)[1:]
-        img_crop_shape[0] = max(2 * self.config["dxy"], backgrounds.shape[1])
-        img_crop_shape[0] = max(2 * self.config["dxy"], backgrounds.shape[2])
+        img_crop_shape[0] = min(2 * self.config["dxy"], backgrounds.shape[1])
+        img_crop_shape[1] = min(2 * self.config["dxy"], backgrounds.shape[2])
         img_crop = np.zeros(img_crop_shape, dtype=np.uint8)
         for i_cam in range(nCams):
             reader = readers[i_cam]
@@ -126,7 +126,7 @@ class DLCtrain:
                 dlc_helper.crop_image(reader, frame,
                                       i_cam, self.config["mask_para"], self.config["mask_para_offset"],
                                       background, background_std, self.config["noise_threshold"],
-                                      self.config["dxy"], img_crop, pixel_crop)
+                                      self.config["dxy"], img_crop, crop_offset)
 
                 # corrected labels
                 if frame in labels.keys():
@@ -134,8 +134,8 @@ class DLCtrain:
                         if feat in sorted(self.config["feat_list"]):
                             x_pose = labels[frame][feat][i_cam, 0]
                             y_pose = labels[frame][feat][i_cam, 1]
-                            x_pose_corrected = x_pose + pixel_crop[0]
-                            y_pose_corrected = y_pose + pixel_crop[1]
+                            x_pose_corrected = x_pose + crop_offset[0]
+                            y_pose_corrected = y_pose + crop_offset[1]
                             if (not (np.isnan(x_pose_corrected)) and not (np.isnan(y_pose_corrected))
                                     and (x_pose_corrected >= 0.0) and (y_pose_corrected >= 0.0)
                                     and (x_pose_corrected <= 2.0 * self.config["dxy"]) and (

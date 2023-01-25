@@ -54,7 +54,7 @@ def calc_backgrounds(file_list,
 def crop_image(i_reader, i_frame,
                i_cam, mask_para, mask_para_offset,
                i_background, i_background_std, noise_threshold,
-               dxy, img_crop, pixel_crop):
+               dxy, img_crop, crop_offset):
     img_crop_shape = np.shape(img_crop)
 
     img0 = i_reader.get_data(i_frame - round(0.125 * cfg.frame_rate))  # 125ms delay
@@ -116,20 +116,13 @@ def crop_image(i_reader, i_frame,
     dx = np.int64(xlim_max_use - xlim_min_use)
     dy = np.int64(ylim_max_use - ylim_min_use)
 
-    center_xy_use = center_xy - np.array([xlim_min_use, ylim_min_use])
-    center_xy_use = dxy - center_xy_use
-    dx_add = center_xy_use[0]
-    dy_add = center_xy_use[1]
-    dx_add_int = np.int64(dx_add)
-    dy_add_int = np.int64(dy_add)
-
     # using the plain image
     img_crop.fill(0)
-    img_crop[dy_add_int:dy + dy_add_int, dx_add_int:dx + dx_add_int] = \
+    img_crop[:dy, :dx] = \
         img[ylim_min_use:ylim_max_use, xlim_min_use:xlim_max_use]
     #     img_crop[dy_add_int:dy+dy_add_int, dx_add_int:dx+dx_add_int] = \
     #         img_bg[ylim_min_use:ylim_max_use, xlim_min_use:xlim_max_use]
     # FIXME: this should save the float values of dx_add / dy_add! (is this the case though?)
-    pixel_crop[0] = -xlim_min_use + dx_add_int
-    pixel_crop[1] = -ylim_min_use + dy_add_int
+    crop_offset[0] = -ylim_min_use
+    crop_offset[1] = -xlim_min_use
     return
