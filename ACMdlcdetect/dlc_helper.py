@@ -12,15 +12,16 @@ import dlcdetectConfig as cfg
 def calc_background(i_reader,
                     x_res, y_res,
                     n_frames_background):
-    mean_x = np.zeros((y_res, x_res), dtype=np.float64)
-    mean_x2 = np.zeros((y_res, x_res), dtype=np.float64)
-    for i_frame in range(n_frames_background):
+    mean_x = np.zeros(i_reader.get_data(0).shape)
+    mean_x2 = np.zeros(i_reader.get_data(0).shape)
+
+    for i_frame in range(1, n_frames_background):
         img = i_reader.get_data(i_frame)
         img = img.astype(np.float64)
-        mean_x = mean_x + (img / n_frames_background)
-        mean_x2 = mean_x2 + (img ** 2 / n_frames_background)
-    background = np.copy(mean_x)
-    background_var = mean_x2 - mean_x ** 2
+        mean_x += img
+        mean_x2 += img ** 2
+    background = mean_x / n_frames_background
+    background_var = mean_x2 / n_frames_background - background ** 2
     mask = (background_var < 0.0)
     if np.any(abs(background_var[mask]) >= 2 ** -23):
         print('ERROR: background_var has inconsistent values')
@@ -34,9 +35,13 @@ def calc_backgrounds(file_list,
                      x_res, y_res,
                      n_frames_background):
     n_cams = np.size(file_list)
-    backgrounds = np.zeros((n_cams, y_res, x_res),
+
+    reader = imageio.get_reader(file_list[0])
+    img = reader.get_data(0)
+
+    backgrounds = np.zeros((n_cams, )+img.shape,
                            dtype=np.float64)
-    backgrounds_std = np.zeros((n_cams, y_res, x_res),
+    backgrounds_std = np.zeros((n_cams, )+img.shape,
                                dtype=np.float64)
     for i_cam in range(n_cams):
         reader = imageio.get_reader(file_list[i_cam])
@@ -56,7 +61,7 @@ def crop_image(i_reader, i_frame,
 
     img = i_reader.get_data(i_frame)
     img_bg = img.astype(np.float64) - img0.astype(np.float64)
-    y_res, x_res = np.shape(img_bg)
+    y_res, x_res = np.shape(img_bg)[0:2]
 
     mask_bg = (np.abs(img_bg) <= (noise_threshold * i_background_std))
     img_mask = np.copy(img)

@@ -17,31 +17,20 @@ import shutil
 import sys
 
 from deeplabcut import DEBUG
+from deeplabcut.utils import auxiliaryfunctions
 
-import dlcdetectConfig as cfg
-
-
-def create_new_project():
+def create_new_project(project_name, working_directory,
+                       scorer="scorer"):
     """
     Creates a new project directory, sub-directories and a basic configuration file. The configuration file is loaded
     with the default values. Change its parameters to your projects need.
 
     """
 
-    project = os.path.basename(os.path.dirname(cfg.__file__))
-    working_directory = cfg.working_directory
-
-    from datetime import datetime as dt
-    from deeplabcut.utils import auxiliaryfunctions
-    date = dt.today()
-    month = date.strftime("%B")
-    day = date.day
-    d = str(month[0:3] + str(day))
-    date = dt.today().strftime('%Y-%m-%d')
     if working_directory is None:
         working_directory = '.'
-    wd = Path(working_directory).resolve()
-    project_path = wd
+    working_directory = Path(working_directory).resolve()
+    project_path = working_directory
 
     # Create project and sub-directories
     if not DEBUG and project_path.exists():
@@ -58,8 +47,8 @@ def create_new_project():
 
     #        Set values to config file:
     cfg_file, ruamel_file = auxiliaryfunctions.create_config_template()
-    cfg_file['Task'] = project
-    cfg_file['scorer'] = cfg.scorer
+    cfg_file['Task'] = project_name
+    cfg_file['scorer'] = scorer
     #     cfg_file['video_sets']=video_sets
     cfg_file['project_path'] = str(project_path)
     cfg_file['date'] = ''
@@ -99,14 +88,13 @@ def create_new_project():
 
 
 # create remaining folder structure
-def create_missing_folders():
-    original_directory = os.path.abspath(os.getcwd())
-    main_directory = os.path.abspath(cfg.working_directory)
+def create_missing_folders(working_directory, iteration):
+    main_directory = os.path.abspath(working_directory)
 
-    os.mkdir(main_directory + '/dlc-models' + '/iteration-{:d}'.format(cfg.iteration))
-    os.mkdir(main_directory + '/training-datasets' + '/iteration-{:d}'.format(
-        cfg.iteration))  # add subfolder and subfolder/train folder
-    os.mkdir(main_directory + '/training-datasets' + '/iteration-{:d}'.format(
-        cfg.iteration) + '/UnaugmentedDataSet')  # csv, h5, pickle, mat files
+    os.mkdir(main_directory + '/dlc-models' + '/iteration-{:d}'.format(iteration))
+    # add subfolder and subfolder/train folder
+    os.mkdir(main_directory + '/training-datasets' + '/iteration-{:d}'.format(iteration))
+    # csv, h5, pickle, mat files
+    os.mkdir(main_directory + '/training-datasets' + '/iteration-{:d}'.format(iteration) + '/UnaugmentedDataSet')
 
     return
