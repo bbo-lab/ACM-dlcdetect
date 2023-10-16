@@ -9,7 +9,7 @@ README = (HERE / "README.md").read_text()
 # This call to setup() does all the work
 setup(
     name="bbo-acm-dlcdetect",
-    version="0.2.0",
+    version="0.3.0",
     description="Wrapper for DeepLabCut to take inputs from our manual-marking GUI and outputs compatible with ACM",
     long_description=README,
     long_description_content_type="text/markdown",
@@ -24,8 +24,8 @@ setup(
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
     ],
-    packages=['ACM'],
+    packages=['ACM-dlcdetect'],
     include_package_data=True,
-    install_requires=["deeplabcut==2.1","matplotlib","scikit-image","numpy","ffmpeg"],
+    install_requires=[],
 )
 #DLC used originally: 2.1.6.4, but I hope minor version is sufficient
